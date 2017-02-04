@@ -35,6 +35,8 @@ public class Bar {
 
     private final float mRightX;
 
+    private final float mMidX;
+
     private final float mY;
 
     private int mNumSegments;
@@ -71,6 +73,7 @@ public class Bar {
 
         mLeftX = x;
         mRightX = x + length;
+        mMidX = x + length / 2;
         mY = y;
 
         mNumSegments = tickCount - 1;
@@ -84,6 +87,7 @@ public class Bar {
         mBarPaint.setColor(barColor);
         mBarPaint.setStrokeWidth(barWeight);
         mBarPaint.setAntiAlias(true);
+        mBarPaint.setStrokeCap(Paint.Cap.ROUND);
         mTickPaint = new Paint();
         mTickPaint.setColor(tickColor);
         mTickPaint.setStrokeWidth(barWeight);
@@ -119,6 +123,15 @@ public class Bar {
      */
     public float getRightX() {
         return mRightX;
+    }
+
+    /**
+     * Get the x-coordinate of the middle point of the bar.
+     *
+     * @return x-coordinate of the middle point of the bar
+     */
+    public float getMidX() {
+        return mMidX;
     }
 
     /**

@@ -142,9 +142,7 @@ public class YinYangBar extends View {
 
     private int mTickCount = (int) ((mTickEnd - mTickStart) / mTickInterval) + 1;
 
-    private PinView mLeftThumb;
-
-    private PinView mRightThumb;
+    private PinView mThumb;
 
     private Bar mBar;
 
@@ -158,9 +156,9 @@ public class YinYangBar extends View {
 
     private int mLeftIndex;
 
-    private int mRightIndex;
+    private int mIndex;
 
-    private boolean mIsRangeBar = true;
+    private boolean mIsYinYangBar = true;
 
     private float mPinPadding = DEFAULT_PIN_PADDING_DP;
 
@@ -208,12 +206,12 @@ public class YinYangBar extends View {
 
     public YinYangBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        rangeBarInit(context, attrs);
+        yinyangBarInit(context, attrs);
     }
 
     public YinYangBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        rangeBarInit(context, attrs);
+        yinyangBarInit(context, attrs);
     }
 
     // View Methods ////////////////////////////////////////////////////////////
@@ -243,10 +241,10 @@ public class YinYangBar extends View {
         bundle.putFloat("EXPANDED_PIN_RADIUS_DP", mExpandedPinRadius);
         bundle.putFloat("PIN_PADDING", mPinPadding);
         bundle.putFloat("BAR_PADDING_BOTTOM", mBarPaddingBottom);
-        bundle.putBoolean("IS_RANGE_BAR", mIsRangeBar);
+        bundle.putBoolean("IS_RANGE_BAR", mIsYinYangBar);
         bundle.putBoolean("ARE_PINS_TEMPORARY", mArePinsTemporary);
         bundle.putInt("LEFT_INDEX", mLeftIndex);
-        bundle.putInt("RIGHT_INDEX", mRightIndex);
+        bundle.putInt("RIGHT_INDEX", mIndex);
 
         bundle.putBoolean("FIRST_SET_TICK_COUNT", mFirstSetTickCount);
 
@@ -280,17 +278,17 @@ public class YinYangBar extends View {
             mExpandedPinRadius = bundle.getFloat("EXPANDED_PIN_RADIUS_DP");
             mPinPadding = bundle.getFloat("PIN_PADDING");
             mBarPaddingBottom = bundle.getFloat("BAR_PADDING_BOTTOM");
-            mIsRangeBar = bundle.getBoolean("IS_RANGE_BAR");
+            mIsYinYangBar = bundle.getBoolean("IS_RANGE_BAR");
             mArePinsTemporary = bundle.getBoolean("ARE_PINS_TEMPORARY");
 
             mLeftIndex = bundle.getInt("LEFT_INDEX");
-            mRightIndex = bundle.getInt("RIGHT_INDEX");
+            mIndex = bundle.getInt("RIGHT_INDEX");
             mFirstSetTickCount = bundle.getBoolean("FIRST_SET_TICK_COUNT");
 
             mMinPinFont = bundle.getFloat("MIN_PIN_FONT");
             mMaxPinFont = bundle.getFloat("MAX_PIN_FONT");
 
-            setRangePinsByIndices(mLeftIndex, mRightIndex);
+            setRangePinsByIndices(mLeftIndex, mIndex);
             super.onRestoreInstanceState(bundle.getParcelable("instanceState"));
 
         } else {
@@ -345,15 +343,16 @@ public class YinYangBar extends View {
         float expandedPinRadius = mExpandedPinRadius / density;
 
         final float yPos = h - mBarPaddingBottom;
-        if (mIsRangeBar) {
-            mLeftThumb = new PinView(ctx);
-            mLeftThumb.setFormatter(mFormatter);
-            mLeftThumb.init(ctx, yPos, expandedPinRadius, mPinColor, mTextColor, mCircleSize,
-                    mCircleColor, mMinPinFont, mMaxPinFont, mArePinsTemporary);
+        if (mIsYinYangBar) {
+//            mLeftThumb = new PinView(ctx);
+//            mLeftThumb.setFormatter(mFormatter);
+//            mLeftThumb.init(ctx, yPos, expandedPinRadius, mPinColor, mTextColor, mCircleSize,
+//                    mCircleColor, mMinPinFont, mMaxPinFont, mArePinsTemporary);
+            // TODO: draw from middle of the bar
         }
-        mRightThumb = new PinView(ctx);
-        mRightThumb.setFormatter(mFormatter);
-        mRightThumb.init(ctx, yPos, expandedPinRadius, mPinColor, mTextColor, mCircleSize,
+        mThumb = new PinView(ctx);
+        mThumb.setFormatter(mFormatter);
+        mThumb.init(ctx, yPos, expandedPinRadius, mPinColor, mTextColor, mCircleSize,
                 mCircleColor, mMinPinFont, mMaxPinFont, mArePinsTemporary);
 
         // Create the underlying bar.
@@ -364,23 +363,24 @@ public class YinYangBar extends View {
                 mBarWeight, mBarColor);
 
         // Initialize thumbs to the desired indices
-        if (mIsRangeBar) {
-            mLeftThumb.setX(marginLeft + (mLeftIndex / (float) (mTickCount - 1)) * barLength);
-            mLeftThumb.setXValue(getPinValue(mLeftIndex));
+        if (mIsYinYangBar) {
+//            mLeftThumb.setX(marginLeft + (mLeftIndex / (float) (mTickCount - 1)) * barLength);
+//            mLeftThumb.setXValue(getPinValue(mLeftIndex));
+            // TODO: draw from middle of the bar
         }
-        mRightThumb.setX(marginLeft + (mRightIndex / (float) (mTickCount - 1)) * barLength);
-        mRightThumb.setXValue(getPinValue(mRightIndex));
+        mThumb.setX(marginLeft + (mIndex / (float) (mTickCount - 1)) * barLength);
+        mThumb.setXValue(getPinValue(mIndex));
 
         // Set the thumb indices.
-        final int newLeftIndex = mIsRangeBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
-        final int newRightIndex = mBar.getNearestTickIndex(mRightThumb);
+//        final int newLeftIndex = mIsYinYangBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
+        final int newIndex = mBar.getNearestTickIndex(mThumb);
 
         // Call the listener.
-        if (newLeftIndex != mLeftIndex || newRightIndex != mRightIndex) {
+        if (newIndex != mIndex) {
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
+                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
                         getPinValue(mLeftIndex),
-                        getPinValue(mRightIndex));
+                        getPinValue(mIndex));
             }
         }
 
@@ -395,19 +395,19 @@ public class YinYangBar extends View {
         super.onDraw(canvas);
 
         mBar.draw(canvas);
-        if (mIsRangeBar) {
-            mConnectingLine.draw(canvas, mLeftThumb, mRightThumb);
+        if (mIsYinYangBar) {
+            mConnectingLine.draw(canvas, mBar.getMidX(), mThumb);
             if (drawTicks) {
                 mBar.drawTicks(canvas);
             }
-            mLeftThumb.draw(canvas);
+//            mLeftThumb.draw(canvas);
         } else {
-            mConnectingLine.draw(canvas, getMarginLeft(), mRightThumb);
+            mConnectingLine.draw(canvas, getMarginLeft(), mThumb);
             if (drawTicks) {
                 mBar.drawTicks(canvas);
             }
         }
-        mRightThumb.draw(canvas);
+        mThumb.draw(canvas);
 
     }
 
@@ -489,12 +489,12 @@ public class YinYangBar extends View {
 
 
     public void setFormatter(IRangeBarFormatter formatter) {
-        if (mLeftThumb != null) {
-            mLeftThumb.setFormatter(formatter);
-        }
+//        if (mLeftThumb != null) {
+//            mLeftThumb.setFormatter(formatter);
+//        }
 
-        if (mRightThumb != null) {
-            mRightThumb.setFormatter(formatter);
+        if (mThumb != null) {
+            mThumb.setFormatter(formatter);
         }
 
         mFormatter = formatter;
@@ -519,22 +519,22 @@ public class YinYangBar extends View {
             // allows it on the first setting.
             if (mFirstSetTickCount) {
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
                             getPinValue(mLeftIndex),
-                            getPinValue(mRightIndex));
+                            getPinValue(mIndex));
                 }
             }
-            if (indexOutOfRange(mLeftIndex, mRightIndex)) {
+            if (indexOutOfRange(mLeftIndex, mIndex)) {
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
                             getPinValue(mLeftIndex),
-                            getPinValue(mRightIndex));
+                            getPinValue(mIndex));
                 }
             }
 
@@ -561,20 +561,20 @@ public class YinYangBar extends View {
             // allows it on the first setting.
             if (mFirstSetTickCount) {
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                            getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                            getPinValue(mLeftIndex), getPinValue(mIndex));
                 }
             }
-            if (indexOutOfRange(mLeftIndex, mRightIndex)) {
+            if (indexOutOfRange(mLeftIndex, mIndex)) {
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                            getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                            getPinValue(mLeftIndex), getPinValue(mIndex));
                 }
             }
 
@@ -601,20 +601,20 @@ public class YinYangBar extends View {
             // allows it on the first setting.
             if (mFirstSetTickCount) {
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                            getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                            getPinValue(mLeftIndex), getPinValue(mIndex));
                 }
             }
-            if (indexOutOfRange(mLeftIndex, mRightIndex)) {
+            if (indexOutOfRange(mLeftIndex, mIndex)) {
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                            getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                            getPinValue(mLeftIndex), getPinValue(mIndex));
                 }
             }
 
@@ -685,7 +685,7 @@ public class YinYangBar extends View {
      * @param isRangeBar Boolean - true sets it to rangebar, false to seekbar.
      */
     public void setRangeBarEnabled(boolean isRangeBar) {
-        mIsRangeBar = isRangeBar;
+        mIsYinYangBar = isRangeBar;
         invalidate();
     }
 
@@ -811,12 +811,12 @@ public class YinYangBar extends View {
                 mFirstSetTickCount = false;
             }
             mLeftIndex = leftPinIndex;
-            mRightIndex = rightPinIndex;
+            mIndex = rightPinIndex;
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                        getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                        getPinValue(mLeftIndex), getPinValue(mIndex));
             }
         }
 
@@ -848,12 +848,12 @@ public class YinYangBar extends View {
             if (mFirstSetTickCount) {
                 mFirstSetTickCount = false;
             }
-            mRightIndex = pinIndex;
+            mIndex = pinIndex;
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                        getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                        getPinValue(mLeftIndex), getPinValue(mIndex));
             }
         }
         invalidate();
@@ -884,12 +884,12 @@ public class YinYangBar extends View {
             }
 
             mLeftIndex = (int) ((leftPinValue - mTickStart) / mTickInterval);
-            mRightIndex = (int) ((rightPinValue - mTickStart) / mTickInterval);
+            mIndex = (int) ((rightPinValue - mTickStart) / mTickInterval);
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                        getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                        getPinValue(mLeftIndex), getPinValue(mIndex));
             }
         }
         invalidate();
@@ -918,12 +918,12 @@ public class YinYangBar extends View {
             if (mFirstSetTickCount) {
                 mFirstSetTickCount = false;
             }
-            mRightIndex = (int) ((pinValue - mTickStart) / mTickInterval);
+            mIndex = (int) ((pinValue - mTickStart) / mTickInterval);
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
-                        getPinValue(mLeftIndex), getPinValue(mRightIndex));
+                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
+                        getPinValue(mLeftIndex), getPinValue(mIndex));
             }
         }
         invalidate();
@@ -936,7 +936,7 @@ public class YinYangBar extends View {
      * @return true if rangebar, false if seekbar.
      */
     public boolean isRangeBar() {
-        return mIsRangeBar;
+        return mIsYinYangBar;
     }
 
     /**
@@ -954,7 +954,7 @@ public class YinYangBar extends View {
      * @return the string value of the right pin.
      */
     public String getRightPinValue() {
-        return getPinValue(mRightIndex);
+        return getPinValue(mIndex);
     }
 
     /**
@@ -972,7 +972,7 @@ public class YinYangBar extends View {
      * @return the 0-based index of the right pin
      */
     public int getRightIndex() {
-        return mRightIndex;
+        return mIndex;
     }
 
     /**
@@ -1017,7 +1017,7 @@ public class YinYangBar extends View {
      * @param context Context from the constructor.
      * @param attrs   AttributeSet from the constructor.
      */
-    private void rangeBarInit(Context context, AttributeSet attrs) {
+    private void yinyangBarInit(Context context, AttributeSet attrs) {
         //TODO tick value map
         if (mTickMap == null) {
             mTickMap = new HashMap<Float, String>();
@@ -1044,12 +1044,12 @@ public class YinYangBar extends View {
                 mTickEnd = tickEnd;
                 mTickInterval = tickInterval;
                 mLeftIndex = 0;
-                mRightIndex = mTickCount - 1;
+                mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
                             getPinValue(mLeftIndex),
-                            getPinValue(mRightIndex));
+                            getPinValue(mIndex));
                 }
 
             } else {
@@ -1060,7 +1060,7 @@ public class YinYangBar extends View {
             mTickHeightDP = ta
                     .getDimension(R.styleable.YinYangBar_tickHeight, DEFAULT_TICK_HEIGHT_DP);
             mBarWeight = ta.getDimension(R.styleable.YinYangBar_barWeight, DEFAULT_BAR_WEIGHT_PX);
-            mBarColor = ta.getColor(R.styleable.YinYangBar_rangeBarColor, DEFAULT_BAR_COLOR);
+            mBarColor = ta.getColor(R.styleable.YinYangBar_yinYangBarColor, DEFAULT_BAR_COLOR);
             mTextColor = ta.getColor(R.styleable.YinYangBar_textColor, DEFAULT_TEXT_COLOR);
             mPinColor = ta.getColor(R.styleable.YinYangBar_pinColor, DEFAULT_PIN_COLOR);
             mActiveBarColor = mBarColor;
@@ -1085,10 +1085,10 @@ public class YinYangBar extends View {
             mPinPadding = ta.getDimension(R.styleable.YinYangBar_pinPadding, TypedValue
                     .applyDimension(TypedValue.COMPLEX_UNIT_DIP, DEFAULT_PIN_PADDING_DP,
                             getResources().getDisplayMetrics()));
-            mBarPaddingBottom = ta.getDimension(R.styleable.YinYangBar_rangeBarPaddingBottom,
+            mBarPaddingBottom = ta.getDimension(R.styleable.YinYangBar_yinYangBarPaddingBottom,
                     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                             DEFAULT_BAR_PADDING_BOTTOM_DP, getResources().getDisplayMetrics()));
-            mIsRangeBar = ta.getBoolean(R.styleable.YinYangBar_rangeBar, true);
+            mIsYinYangBar = ta.getBoolean(R.styleable.YinYangBar_yinYangBar, true);
             mArePinsTemporary = ta.getBoolean(R.styleable.YinYangBar_temporaryPins, true);
 
             float density = getResources().getDisplayMetrics().density;
@@ -1097,7 +1097,6 @@ public class YinYangBar extends View {
             mMaxPinFont = ta.getDimension(R.styleable.YinYangBar_pinMaxFont,
                     DEFAULT_MAX_PIN_FONT_SP * density);
 
-            mIsRangeBar = ta.getBoolean(R.styleable.YinYangBar_rangeBar, true);
         } finally {
             ta.recycle();
         }
@@ -1138,13 +1137,14 @@ public class YinYangBar extends View {
         Context ctx = getContext();
         float yPos = getYPos();
 
-        if (mIsRangeBar) {
-            mLeftThumb = new PinView(ctx);
-            mLeftThumb.init(ctx, yPos, 0, mPinColor, mTextColor, mCircleSize, mCircleColor,
-                    mMinPinFont, mMaxPinFont, false);
+        if (mIsYinYangBar) {
+//            mLeftThumb = new PinView(ctx);
+//            mLeftThumb.init(ctx, yPos, 0, mPinColor, mTextColor, mCircleSize, mCircleColor,
+//                    mMinPinFont, mMaxPinFont, false);
+            // TODO: Delete?
         }
-        mRightThumb = new PinView(ctx);
-        mRightThumb
+        mThumb = new PinView(ctx);
+        mThumb
                 .init(ctx, yPos, 0, mPinColor, mTextColor, mCircleSize, mCircleColor, mMinPinFont,
                         mMaxPinFont, false);
 
@@ -1152,12 +1152,13 @@ public class YinYangBar extends View {
         float barLength = getBarLength();
 
         // Initialize thumbs to the desired indices
-        if (mIsRangeBar) {
-            mLeftThumb.setX(marginLeft + (mLeftIndex / (float) (mTickCount - 1)) * barLength);
-            mLeftThumb.setXValue(getPinValue(mLeftIndex));
+        if (mIsYinYangBar) {
+//            mLeftThumb.setX(marginLeft + (mLeftIndex / (float) (mTickCount - 1)) * barLength);
+//            mLeftThumb.setXValue(getPinValue(mLeftIndex));
+            // TODO: Delete?
         }
-        mRightThumb.setX(marginLeft + (mRightIndex / (float) (mTickCount - 1)) * barLength);
-        mRightThumb.setXValue(getPinValue(mRightIndex));
+        mThumb.setX(marginLeft + (mIndex / (float) (mTickCount - 1)) * barLength);
+        mThumb.setXValue(getPinValue(mIndex));
 
         invalidate();
     }
@@ -1231,19 +1232,22 @@ public class YinYangBar extends View {
      * @param y the y-coordinate of the down action
      */
     private void onActionDown(float x, float y) {
-        if (mIsRangeBar) {
-            if (!mRightThumb.isPressed() && mLeftThumb.isInTargetZone(x, y)) {
-
-                pressPin(mLeftThumb);
-
-            } else if (!mLeftThumb.isPressed() && mRightThumb.isInTargetZone(x, y)) {
-
-                pressPin(mRightThumb);
-            }
-        } else {
-            if (mRightThumb.isInTargetZone(x, y)) {
-                pressPin(mRightThumb);
-            }
+//        if (mIsYinYangBar) {
+//            if (!mThumb.isPressed() && mLeftThumb.isInTargetZone(x, y)) {
+//
+//                pressPin(mLeftThumb);
+//
+//            } else if (!mLeftThumb.isPressed() && mThumb.isInTargetZone(x, y)) {
+//
+//                pressPin(mThumb);
+//            }
+//        } else {
+//            if (mThumb.isInTargetZone(x, y)) {
+//                pressPin(mThumb);
+//            }
+//        }
+        if (mThumb.isInTargetZone(x, y)) {
+            pressPin(mThumb);
         }
     }
 
@@ -1255,42 +1259,45 @@ public class YinYangBar extends View {
      * @param y the y-coordinate of the up action
      */
     private void onActionUp(float x, float y) {
-        if (mIsRangeBar && mLeftThumb.isPressed()) {
+//        if (mIsYinYangBar && mLeftThumb.isPressed()) {
+//
+//            releasePin(mLeftThumb);
+//
+//        } else
+        if (mThumb.isPressed()) {
 
-            releasePin(mLeftThumb);
-
-        } else if (mRightThumb.isPressed()) {
-
-            releasePin(mRightThumb);
+            releasePin(mThumb);
 
         } else {
-
-            float leftThumbXDistance = mIsRangeBar ? Math.abs(mLeftThumb.getX() - x) : 0;
-            float rightThumbXDistance = Math.abs(mRightThumb.getX() - x);
-
-            if (leftThumbXDistance < rightThumbXDistance) {
-                if (mIsRangeBar) {
-                    mLeftThumb.setX(x);
-                    releasePin(mLeftThumb);
-                }
-            } else {
-                mRightThumb.setX(x);
-                releasePin(mRightThumb);
-            }
+            // TODO: Delete?
+//            float leftThumbXDistance = mIsYinYangBar ? Math.abs(mLeftThumb.getX() - x) : 0;
+//            float rightThumbXDistance = Math.abs(mThumb.getX() - x);
+//
+//            if (leftThumbXDistance < rightThumbXDistance) {
+//                if (mIsYinYangBar) {
+//                    mLeftThumb.setX(x);
+//                    releasePin(mLeftThumb);
+//                }
+//            } else {
+//                mThumb.setX(x);
+//                releasePin(mThumb);
+//            }
 
             // Get the updated nearest tick marks for each thumb.
-            final int newLeftIndex = mIsRangeBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
-            final int newRightIndex = mBar.getNearestTickIndex(mRightThumb);
+//            final int newLeftIndex = mIsYinYangBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
+            final int newRightIndex = mBar.getNearestTickIndex(mThumb);
             // If either of the indices have changed, update and call the listener.
-            if (newLeftIndex != mLeftIndex || newRightIndex != mRightIndex) {
+//            if (newLeftIndex != mLeftIndex ||
+            if (newRightIndex != mIndex) {
 
-                mLeftIndex = newLeftIndex;
-                mRightIndex = newRightIndex;
+//                mLeftIndex = newLeftIndex;
+                mIndex = newRightIndex;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
+                    // TODO: Fix this interface
+                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
                             getPinValue(mLeftIndex),
-                            getPinValue(mRightIndex));
+                            getPinValue(mIndex));
                 }
             }
         }
@@ -1304,48 +1311,53 @@ public class YinYangBar extends View {
     private void onActionMove(float x) {
 
         // Move the pressed thumb to the new x-position.
-        if (mIsRangeBar && mLeftThumb.isPressed()) {
-            movePin(mLeftThumb, x);
-        } else if (mRightThumb.isPressed()) {
-            movePin(mRightThumb, x);
-        }
+//        if (mIsYinYangBar && mLeftThumb.isPressed()) {
+//            movePin(mLeftThumb, x);
+//        } else if (mThumb.isPressed()) {
+//            movePin(mThumb, x);
+//        }
+        movePin(mThumb, x);
 
         // If the thumbs have switched order, fix the references.
-        if (mIsRangeBar && mLeftThumb.getX() > mRightThumb.getX()) {
-            final PinView temp = mLeftThumb;
-            mLeftThumb = mRightThumb;
-            mRightThumb = temp;
-        }
+//        if (mIsYinYangBar && mLeftThumb.getX() > mThumb.getX()) {
+//            final PinView temp = mLeftThumb;
+//            mLeftThumb = mThumb;
+//            mThumb = temp;
+//        }
 
+        // TODO: not understand?
         // Get the updated nearest tick marks for each thumb.
-        int newLeftIndex = mIsRangeBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
-        int newRightIndex = mBar.getNearestTickIndex(mRightThumb);
+//        int newLeftIndex = mIsYinYangBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
+        int newRightIndex = mBar.getNearestTickIndex(mThumb);
 
         final int componentLeft = getLeft() + getPaddingLeft();
         final int componentRight = getRight() - getPaddingRight() - componentLeft;
 
         if (x <= componentLeft) {
-            newLeftIndex = 0;
-            movePin(mLeftThumb, mBar.getLeftX());
+//            newLeftIndex = 0;
+            movePin(mThumb, mBar.getLeftX());
         } else if (x >= componentRight) {
             newRightIndex = getTickCount() - 1;
-            movePin(mRightThumb, mBar.getRightX());
+            movePin(mThumb, mBar.getRightX());
         }
         /// end added code
         // If either of the indices have changed, update and call the listener.
-        if (newLeftIndex != mLeftIndex || newRightIndex != mRightIndex) {
+//        if (newLeftIndex != mLeftIndex ||
+                if (newRightIndex != mIndex) {
 
-            mLeftIndex = newLeftIndex;
-            mRightIndex = newRightIndex;
-            if (mIsRangeBar) {
-                mLeftThumb.setXValue(getPinValue(mLeftIndex));
-            }
-            mRightThumb.setXValue(getPinValue(mRightIndex));
+//            mLeftIndex = newLeftIndex;
+            mIndex = newRightIndex;
+            // TODO: Delete?
+//            if (mIsYinYangBar) {
+//                mLeftThumb.setXValue(getPinValue(mLeftIndex));
+//            }
+            mThumb.setXValue(getPinValue(mIndex));
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mRightIndex,
+                // TODO: Change this interface
+                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
                         getPinValue(mLeftIndex),
-                        getPinValue(mRightIndex));
+                        getPinValue(mIndex));
             }
         }
     }

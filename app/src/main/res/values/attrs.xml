@@ -7,16 +7,16 @@
         <attr name="tickHeight" format="dimension" />
         <attr name="tickColor" format="color" />
         <attr name="barWeight" format="dimension" />
-        <attr name="rangeBarColor" format="reference|color" />
+        <attr name="yinYangBarColor" format="reference|color" />
         <attr name="textColor" format="reference|color" />
         <attr name="pinColor" format="reference|color" />
         <attr name="selectorSize" format="dimension" />
         <attr name="pinPadding" format="dimension" />
         <attr name="pinMinFont" format="dimension" />
         <attr name="pinMaxFont" format="dimension" />
-        <attr name="rangeBarPaddingBottom" format="dimension" />
+        <attr name="yinYangBarPaddingBottom" format="dimension" />
         <attr name="selectorColor" format="reference|color" />
-        <attr name="rangeBar" format="boolean" />
+        <attr name="yinYangBar" format="boolean" />
         <attr name="temporaryPins" format="boolean" />
         <attr name="connectingLineWeight" format="dimension" />
         <attr name="connectingLineColor" format="reference|color" />
