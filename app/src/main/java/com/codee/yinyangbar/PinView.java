@@ -259,7 +259,7 @@ class PinView extends View {
     //Draw the circle regardless of pressed state. If pin size is >0 then also draw the pin and text
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawCircle(mX, mY, mCircleRadiusPx, mCirclePaint);
+
         //Draw pin if pressed
         if (mPinRadiusPx > 0 && (mHasBeenPressed || !mPinsAreTemporary)) {
             mBounds.set((int) mX - mPinRadiusPx,
@@ -278,10 +278,26 @@ class PinView extends View {
             mPin.setColorFilter(mPinFilter);
             mPin.draw(canvas);
             canvas.drawText(text,
-                    mX, mY - mPinRadiusPx - mPinPadding + mTextYPadding,
+                    mX, mY - mPinRadiusPx - mPinPadding + 2*mTextYPadding,
                     mTextPaint);
+        } else {
+            canvas.drawCircle(mX, mY, mCircleRadiusPx, mCirclePaint);
+            mBounds.set((int) (mX - mCircleRadiusPx),
+                    (int) (mY - mCircleRadiusPx), (int) (mX + mCircleRadiusPx), (int) (mY + mCircleRadiusPx));
+            String text = mValue;
+            if (this.formatter != null) {
+                text = formatter.format(text);
+            }
+            calibrateTextSize(mTextPaint, text, mBounds.width());
+            mTextPaint.getTextBounds(text, 0, text.length(), mBounds);
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText(text, mX, mY + (float) 1.5 * mTextYPadding , mTextPaint);
         }
         super.draw(canvas);
+    }
+
+    private void drawText() {
+
     }
 
     // Private Methods /////////////////////////////////////////////////////////////////
