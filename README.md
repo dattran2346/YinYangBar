@@ -3,7 +3,7 @@
 YinYangBar is a fork of https://github.com/oli107/material-range-bar that I leverage the awesome UI desgin but tweak the functionality to my own need.
 It is similar to an enhanced SeekBar widget, though it add a functionality of showing the range from the middle of the bar.
 
-![Img](https://github.com/dattran2346/material-range-bar/blob/master/Screenshots/pin%20expand.gif)
+![Img](https://github.com/dattran2346/YinYangBar/blob/master/demo.gif)
 
 
 ### Tick Properties
