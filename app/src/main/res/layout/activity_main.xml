@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.codee.yinyangbar.MainActivity">
+    tools:context="com.codee.sample.MainActivity">
 
     <com.codee.yinyangbar.YinYangBar
         android:layout_width="wrap_content"
