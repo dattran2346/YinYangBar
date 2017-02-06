@@ -181,7 +181,7 @@ public class YinYangBar extends View {
 
     private float mLastY;
 
-    private IRangeBarFormatter mFormatter;
+    private IYinYangBarFormatter mFormatter;
 
     private boolean drawTicks = true;
 
@@ -488,7 +488,7 @@ public class YinYangBar extends View {
     }
 
 
-    public void setFormatter(IRangeBarFormatter formatter) {
+    public void setFormatter(IYinYangBarFormatter formatter) {
 //        if (mLeftThumb != null) {
 //            mLeftThumb.setFormatter(formatter);
 //        }

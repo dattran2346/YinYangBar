@@ -1,14 +1,40 @@
 apply plugin: 'com.android.library'
+//apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.jfrog.bintray'
+
+//ext {
+//    bintrayRepo = 'Codee'
+//    bintrayName = 'YinYangBar'
+//
+//    publishedGroupId = 'com.codee.yinyangbar'
+//    libraryName = 'YinYangBar'
+//    artifact = 'yinyangbar'
+//
+//    libraryDescription = 'A slider that starts from the middle'
+//
+//    siteUrl = 'https://github.com/dattran2346/YinYangBar'
+//    gitUrl = 'https://github.com/dattran2346/YinYangBar.git'
+//
+//    libraryVersion = '0.1.5'
+//
+//    developerId = 'dattran2346'
+//    developerName = 'Tran Quang Dat'
+//    developerEmail = 'dattran2346@gmail.com'
+//
+//    licenseName = 'The Apache Software License, Version 2.0'
+//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//    allLicenses = ["Apache-2.0"]
+//}
 
 ext {
     PUBLISH_GROUP_ID = 'com.codee.yinyangbar'
     PUBLISH_ARTIFACT_ID = 'yinyangbar'
-    PUBLISH_VERSION = '0.1.2'
+    PUBLISH_VERSION = '0.1.6'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 24
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         minSdkVersion 16
@@ -25,6 +51,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+
 }
 
 dependencies {
@@ -32,10 +65,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:appcompat-v7:23.4.0'
     testCompile 'junit:junit:4.12'
 
 }
 
-// or use the remote copy to keep update with latest changes
+// Place it at the end of the file
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+//apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 apply from: 'https://raw.githubusercontent.com/blundell/release-android-library/master/android-release-aar.gradle'

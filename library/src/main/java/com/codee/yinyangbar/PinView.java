@@ -83,7 +83,7 @@ class PinView extends View {
 
     private float mCircleRadiusPx;
 
-    private IRangeBarFormatter formatter;
+    private IYinYangBarFormatter formatter;
 
     private float mMinPinFont = YinYangBar.DEFAULT_MIN_PIN_FONT_SP;
 
@@ -101,7 +101,7 @@ class PinView extends View {
 
     // Initialization //////////////////////////////////////////////////////////
 
-    public void setFormatter(IRangeBarFormatter mFormatter) {
+    public void setFormatter(IYinYangBarFormatter mFormatter) {
         this.formatter = mFormatter;
     }
 
