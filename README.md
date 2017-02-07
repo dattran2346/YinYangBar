@@ -94,7 +94,7 @@ Installation
 
 ```groovy
 dependencies {
-    compile 'com.codee.yinyangbar:yinyangbar:0.1.7'
+    compile 'com.codee.yinyangbar:yinyangbar:0.1.8'
 }
 ```
 
