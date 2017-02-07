@@ -256,10 +256,8 @@ class PinView extends View {
                 && Math.abs(y - mY + mPinPadding) <= mTargetRadiusPx);
     }
 
-    //Draw the circle regardless of pressed state. If pin size is >0 then also draw the pin and text
     @Override
     public void draw(Canvas canvas) {
-
         //Draw pin if pressed
         if (mPinRadiusPx > 0 && (mHasBeenPressed || !mPinsAreTemporary)) {
             mBounds.set((int) mX - mPinRadiusPx,

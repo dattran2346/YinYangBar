@@ -400,7 +400,6 @@ public class YinYangBar extends View {
             if (drawTicks) {
                 mBar.drawTicks(canvas);
             }
-//            mLeftThumb.draw(canvas);
         } else {
             mConnectingLine.draw(canvas, getMarginLeft(), mThumb);
             if (drawTicks) {
@@ -933,9 +932,9 @@ public class YinYangBar extends View {
     /**
      * Gets the type of the bar.
      *
-     * @return true if rangebar, false if seekbar.
+     * @return true if yinyang, false if seekbar.
      */
-    public boolean isRangeBar() {
+    public boolean isYinYangBar() {
         return mIsYinYangBar;
     }
 
@@ -1311,46 +1310,38 @@ public class YinYangBar extends View {
     private void onActionMove(float x) {
 
         // Move the pressed thumb to the new x-position.
-//        if (mIsYinYangBar && mLeftThumb.isPressed()) {
-//            movePin(mLeftThumb, x);
-//        } else if (mThumb.isPressed()) {
-//            movePin(mThumb, x);
-//        }
         movePin(mThumb, x);
+        Log.d("onActionMove", String.valueOf(x));
+        Log.d("bar left", String.valueOf(mBar.getLeftX()));
+        Log.d("bar right", String.valueOf(mBar.getRightX()));
+        Log.d("bar length", String.valueOf(mBar.getRightX() - mBar.getLeftX()));
 
-        // If the thumbs have switched order, fix the references.
-//        if (mIsYinYangBar && mLeftThumb.getX() > mThumb.getX()) {
-//            final PinView temp = mLeftThumb;
-//            mLeftThumb = mThumb;
-//            mThumb = temp;
-//        }
 
-        // TODO: not understand?
         // Get the updated nearest tick marks for each thumb.
-//        int newLeftIndex = mIsYinYangBar ? mBar.getNearestTickIndex(mLeftThumb) : 0;
-        int newRightIndex = mBar.getNearestTickIndex(mThumb);
+        int newIndex = mBar.getNearestTickIndex(mThumb);
 
-        final int componentLeft = getLeft() + getPaddingLeft();
-        final int componentRight = getRight() - getPaddingRight() - componentLeft;
+        final float componentLeft = mBar.getLeftX();
+        final float componentRight = mBar.getRightX();
 
+        Log.d("left", String.valueOf(componentLeft));
+        Log.d("right", String.valueOf(componentRight));
+
+        // if user finger move out the bar range, reset to the bar edge
+        // x is in this bar coordinate, left start from 0
         if (x <= componentLeft) {
-//            newLeftIndex = 0;
+            newIndex = 0;
             movePin(mThumb, mBar.getLeftX());
         } else if (x >= componentRight) {
-            newRightIndex = getTickCount() - 1;
+            newIndex = getTickCount() - 1;
             movePin(mThumb, mBar.getRightX());
         }
         /// end added code
         // If either of the indices have changed, update and call the listener.
 //        if (newLeftIndex != mLeftIndex ||
-                if (newRightIndex != mIndex) {
+        if (newIndex != mIndex) {
 
 //            mLeftIndex = newLeftIndex;
-            mIndex = newRightIndex;
-            // TODO: Delete?
-//            if (mIsYinYangBar) {
-//                mLeftThumb.setXValue(getPinValue(mLeftIndex));
-//            }
+            mIndex = newIndex;
             mThumb.setXValue(getPinValue(mIndex));
 
             if (mListener != null) {

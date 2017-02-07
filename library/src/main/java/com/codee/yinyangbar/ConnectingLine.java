@@ -61,25 +61,15 @@ public class ConnectingLine {
 
     // Package-Private Methods /////////////////////////////////////////////////
 
-    /**
-     * Draw the connecting line between the two thumbs in rangebar.
-     *
-     * @param canvas     the Canvas to draw to
-     * @param leftThumb  the left thumb
-     * @param rightThumb the right thumb
-     */
-    public void draw(Canvas canvas, PinView leftThumb, PinView rightThumb) {
-        canvas.drawLine(leftThumb.getX(), mY, rightThumb.getX(), mY, mPaint);
-    }
 
     /**
      * Draw the connecting line between for single slider.
      *
-     * @param canvas     the Canvas to draw to
-     * @param rightThumb the right thumb
+     * @param canvas the Canvas to draw to
+     * @param thumb the thumb
      * @param leftMargin the left margin
      */
-    public void draw(Canvas canvas, float leftMargin, PinView rightThumb) {
-        canvas.drawLine(leftMargin, mY, rightThumb.getX(), mY, mPaint);
+    public void draw(Canvas canvas, float leftMargin, PinView thumb) {
+        canvas.drawLine(leftMargin, mY, thumb.getX(), mY, mPaint);
     }
 }
