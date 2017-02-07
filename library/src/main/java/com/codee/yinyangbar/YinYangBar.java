@@ -72,7 +72,7 @@ public class YinYangBar extends View {
 
     public static final float DEFAULT_MIN_PIN_FONT_SP = 8;
 
-    public static final float DEFAULT_MAX_PIN_FONT_SP = 24;
+    public static final float DEFAULT_MAX_PIN_FONT_SP = 22;
 
     private static final float DEFAULT_BAR_WEIGHT_PX = 2;
 

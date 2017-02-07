@@ -270,7 +270,7 @@ class PinView extends View {
                 text = formatter.format(text);
             }
 
-            calibrateTextSize(mTextPaint, text, mBounds.width());
+            calibrateTextSize(mTextPaint, text, mBounds.width(), 8);
             mTextPaint.getTextBounds(text, 0, text.length(), mBounds);
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             mPin.setColorFilter(mPinFilter);
@@ -286,7 +286,7 @@ class PinView extends View {
             if (this.formatter != null) {
                 text = formatter.format(text);
             }
-            calibrateTextSize(mTextPaint, text, mBounds.width());
+            calibrateTextSize(mTextPaint, text, mBounds.width(), 7);
             mTextPaint.getTextBounds(text, 0, text.length(), mBounds);
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             canvas.drawText(text, mX, mY + (float) 1.5 * mTextYPadding , mTextPaint);
@@ -301,11 +301,11 @@ class PinView extends View {
     // Private Methods /////////////////////////////////////////////////////////////////
 
     //Set text size based on available pin width.
-    private void calibrateTextSize(Paint paint, String text, float boxWidth) {
+    private void calibrateTextSize(Paint paint, String text, float boxWidth, int desireValue) {
         paint.setTextSize(10);
 
         float textSize = paint.measureText(text);
-        float estimatedFontSize = boxWidth * 8 / textSize / mDensity;
+        float estimatedFontSize = boxWidth * desireValue / textSize / mDensity;
 
         if (estimatedFontSize < mMinPinFont) {
             estimatedFontSize = mMinPinFont;
