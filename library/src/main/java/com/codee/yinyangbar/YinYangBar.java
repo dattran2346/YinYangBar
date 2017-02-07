@@ -378,8 +378,7 @@ public class YinYangBar extends View {
         // Call the listener.
         if (newIndex != mIndex) {
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                        getPinValue(mLeftIndex),
+                mListener.onRangeChangeListener(this, mIndex,
                         getPinValue(mIndex));
             }
         }
@@ -521,8 +520,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex),
+                    mListener.onRangeChangeListener(this, mIndex,
                             getPinValue(mIndex));
                 }
             }
@@ -531,8 +529,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex),
+                    mListener.onRangeChangeListener(this, mIndex,
                             getPinValue(mIndex));
                 }
             }
@@ -563,8 +560,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex), getPinValue(mIndex));
+                    mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
                 }
             }
             if (indexOutOfRange(mLeftIndex, mIndex)) {
@@ -572,8 +568,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex), getPinValue(mIndex));
+                    mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
                 }
             }
 
@@ -603,8 +598,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex), getPinValue(mIndex));
+                    mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
                 }
             }
             if (indexOutOfRange(mLeftIndex, mIndex)) {
@@ -612,8 +606,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex), getPinValue(mIndex));
+                    mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
                 }
             }
 
@@ -814,8 +807,7 @@ public class YinYangBar extends View {
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                        getPinValue(mLeftIndex), getPinValue(mIndex));
+                mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
             }
         }
 
@@ -851,8 +843,7 @@ public class YinYangBar extends View {
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                        getPinValue(mLeftIndex), getPinValue(mIndex));
+                mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
             }
         }
         invalidate();
@@ -887,8 +878,7 @@ public class YinYangBar extends View {
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                        getPinValue(mLeftIndex), getPinValue(mIndex));
+                mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
             }
         }
         invalidate();
@@ -921,8 +911,7 @@ public class YinYangBar extends View {
             createPins();
 
             if (mListener != null) {
-                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                        getPinValue(mLeftIndex), getPinValue(mIndex));
+                mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
             }
         }
         invalidate();
@@ -1046,8 +1035,7 @@ public class YinYangBar extends View {
                 mIndex = mTickCount - 1;
 
                 if (mListener != null) {
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex),
+                    mListener.onRangeChangeListener(this, mIndex,
                             getPinValue(mIndex));
                 }
 
@@ -1294,9 +1282,7 @@ public class YinYangBar extends View {
 
                 if (mListener != null) {
                     // TODO: Fix this interface
-                    mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                            getPinValue(mLeftIndex),
-                            getPinValue(mIndex));
+                    mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
                 }
             }
         }
@@ -1346,9 +1332,7 @@ public class YinYangBar extends View {
 
             if (mListener != null) {
                 // TODO: Change this interface
-                mListener.onRangeChangeListener(this, mLeftIndex, mIndex,
-                        getPinValue(mLeftIndex),
-                        getPinValue(mIndex));
+                mListener.onRangeChangeListener(this, mIndex, getPinValue(mIndex));
             }
         }
     }
@@ -1464,8 +1448,8 @@ public class YinYangBar extends View {
      */
     public interface OnRangeBarChangeListener {
 
-        public void onRangeChangeListener(YinYangBar rangeBar, int leftPinIndex,
-                                          int rightPinIndex, String leftPinValue, String rightPinValue);
+        public void onRangeChangeListener(YinYangBar rangeBar,
+                                          int index, String pinValue);
     }
 
     public interface PinTextFormatter {
