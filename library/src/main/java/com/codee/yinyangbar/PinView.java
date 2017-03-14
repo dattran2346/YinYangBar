@@ -270,7 +270,7 @@ class PinView extends View {
                 text = formatter.format(text);
             }
 
-            calibrateTextSize(mTextPaint, text, mBounds.width(), 8);
+            calibrateTextSize(mTextPaint, text, mBounds.width(), 7);
             mTextPaint.getTextBounds(text, 0, text.length(), mBounds);
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             mPin.setColorFilter(mPinFilter);

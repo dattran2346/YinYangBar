@@ -20,6 +20,7 @@
         app:selectorSize="12dp"
         app:barWeight="8dp"
         app:tickEnd="100"
+        app:tickStart="-100"
         app:pinRadius="16dp"
         app:tickColor="@android:color/darker_gray"
         app:pinColor="@color/colorAccent"
